@@ -10,7 +10,7 @@ from doc_helper import read_file
 
 load_dotenv()
 
-db = chromadb.PersistentClient(path="./chroma_db")
+db = chromadb.PersistentClient(path="/tmp/chroma_db")
 brain = db.get_or_create_collection("documents")
 memory = db.get_or_create_collection("conversation")
 

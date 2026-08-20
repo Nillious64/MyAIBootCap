@@ -263,7 +263,7 @@ if user_input and prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
     client = OpenAI(
         base_url="https://api.groq.com/openai/v1",
-        api_key=os.getenv("GITHUB_TOKEN"),
+        api_key=os.getenv("GITHUB_TOKEN") or st.secrets["GITHUB_TOKEN"],
     )
     with st.chat_message("user"):
         st.write(prompt)

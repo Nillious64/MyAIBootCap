@@ -202,7 +202,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 with st.sidebar:
-    date = st.text_input("What is today's date?")
+    date = st.text_input("What is today's date? (Please include year as well)")
     st.header("Settings")
     tone = st.selectbox("Tone", ["Casual/Friendly", "Formal"])
     creativity = st.slider("Creativity", 0.0, 1.0, 0.3)

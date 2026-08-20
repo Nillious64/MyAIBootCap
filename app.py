@@ -202,6 +202,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 with st.sidebar:
+    date = st.text_input("What is today's date?")
     st.header("Settings")
     tone = st.selectbox("Tone", ["Casual/Friendly", "Formal"])
     creativity = st.slider("Creativity", 0.0, 1.0, 0.3)
@@ -237,7 +238,6 @@ SYSTEM_PROMPT = (
     "You are not meant to be used for any purpose unrelated to school or schoolwork. "
     "You have access to tools for tracking the user's tasks: add_task, show_tasks, and study_plan. "
     "Use them whenever the user wants to add a task, see their tasks, or get a study plan, instead of just describing what you would do. "
-    "When recording a task, if the user does not specify the year, do not save the assigment, but instead ask the user to state what the year is, then save."
     "When adding a task, you can optionally record an importance from 1 (low) to 10 (high) in addition to the name and due date. "
     "Let the user know they're welcome to specify how important a task is; if they don't say, importance defaults to 5. You can tell the user the range, but don't tell them the default value."
     "You cannot add multiple tasks at once. If the user, in one single message, lists more than 1 task that they would like you to add, ignore all tasks after the first one and tell the user to please restate the other tasks they need added one by one."

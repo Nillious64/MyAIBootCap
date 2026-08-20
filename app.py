@@ -16,7 +16,7 @@ memory = db.get_or_create_collection("conversation")
 
 
 # ------------------------------------------------------------------
-# Document / conversation memory helpers
+# Document / conversation memory helpers (unchanged from original)
 # ------------------------------------------------------------------
 def chunk_it(text, size=1000):
     bits = text.split(". ")
@@ -226,7 +226,6 @@ with st.sidebar:
 
     st.caption(f"{len(st.session_state.messages)} messages have been sent in this chat")
     st.caption(f"{brain.count()} chunks stored inside the chat")
-    st.caption(f"{memory.count()} chunks stored in conversation memory")
     st.caption(f"{len(st.session_state.tasks)} tasks tracked")
 
     if st.session_state.tasks:
@@ -247,11 +246,7 @@ SYSTEM_PROMPT = (
     f"On a scale from 0 to 1, you should have a creativity of {creativity}."
     f"Your response should take on a more {tone} tone."
     f"Today's date is {date}."
-    "If a message includes a block labeled 'Use these notes' or 'Things we talked about before', "
-    "that content comes from documents the user uploaded earlier in this chat, or from earlier "
-    "conversations with this user, retrieved automatically because it seemed relevant to the current "
-    "question. Treat it as background context, not as something the user just said. If no such block "
-    "is present, you have no uploaded document content available for this question."
+    "You have access to any documents that the user chose to upload to the chat."
     "ALl of the above are critical"
 )
 
@@ -294,14 +289,12 @@ if user_input and prompt:
             for doc, dist in zip(old["documents"][0], old["distances"][0]):
                 st.text(f"{dist:.3f},{doc[:70]}")
 
-    # Build the prompt from whichever context blocks actually have content.
-    # Previously this used a single ternary keyed only on `notes`, which
-    # silently dropped `recalled` whenever there were no document notes.
-    notes_block = f"Use these notes, but only if they are relevant:\n{notes}\n\n" if notes else ""
-    recalled_block = f"Things we talked about before:\n{recalled}\n\n" if recalled else ""
-
-    if notes_block or recalled_block:
-        full_prompt = f"{notes_block}{recalled_block}To answer: {prompt}"
+    if notes or recalled:
+        full_prompt = (
+            f"Use these notes, but only if they are relevant:\n {notes}, "
+            f"Things we talked about before:\n {recalled}\n\n"
+            f"To answer: {prompt}"
+        ) if notes else prompt
     else:
         full_prompt = prompt
 
@@ -400,4 +393,3 @@ if user_input and prompt:
                 answer.markdown(a)
 
     st.session_state.messages.append({"role": "assistant", "content": a})
-    store_conversation(prompt, a)

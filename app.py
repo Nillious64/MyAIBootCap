@@ -245,6 +245,7 @@ SYSTEM_PROMPT = (
     "Answer clearly, using relatively simple language so it is easy to read."
     f"On a scale from 0 to 1, you should have a creativity of {creativity}."
     f"Your response should take on a more {tone} tone."
+    f"Today's date is {date}."
     "ALl of the above are critical"
 )
 
